@@ -116,11 +116,10 @@
             position: relative;
             background-color: var(--paper-bg);
             padding: 20px;
-            display: grid;
-            grid-template-rows: 1fr auto;
+            display: flex;
+            flex-direction: column;
             align-items: center;
-            justify-items: center;
-            gap: 15px;
+            justify-content: space-between;
             min-height: 480px;
         }
 
@@ -159,20 +158,18 @@
             position: relative;
             width: 100%;
             max-width: 300px;
-            height: 100%;
-            display: grid;
-            grid-template-areas: "stack";
+            height: 320px;
+            display: flex;
             align-items: center;
-            justify-items: center;
+            justify-content: center;
         }
 
         .envelope-image, .letter-content {
-            grid-area: stack;
+            position: absolute;
             width: 100%;
             height: auto;
             max-height: 100%;
             object-fit: contain;
-            display: block;
         }
 
         .envelope-image {
@@ -218,10 +215,9 @@
             transform: scale(1.05);
         }
 
-        /* KUE & ANIMASI LILIN */
+        /* ANIMASI GAMBAR KUE & LILIN (CSS ONLY) */
         .cake-container {
             width: 100%;
-            height: 100%;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -231,65 +227,81 @@
         .cake-wrapper {
             position: relative;
             width: 100%;
-            max-width: 300px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            max-width: 280px;
         }
 
         .cake-image {
             width: 100%;
             height: auto;
-            object-fit: contain;
+            display: block;
+            transition: filter 0.2s ease, transform 0.15s ease;
+            filter: drop-shadow(0 0 12px rgba(255, 175, 0, 0.6));
+            animation: flameGlow 0.15s infinite alternate ease-in-out;
+        }
+
+        /* ANIMASI NYALA BERKERLIP */
+        @keyframes flameGlow {
+            0% {
+                filter: drop-shadow(0 0 8px rgba(255, 140, 0, 0.5));
+                transform: scale(1) rotate(-0.5deg);
+            }
+            100% {
+                filter: drop-shadow(0 0 16px rgba(255, 200, 0, 0.8));
+                transform: scale(1.01) rotate(0.5deg);
+            }
+        }
+
+        /* EFEK SAAT DITIUP (MIRING) */
+        .cake-image.blowing {
+            transform: skewX(-4deg) scale(0.99) !important;
+            filter: drop-shadow(0 0 4px rgba(255, 100, 0, 0.4)) !important;
+        }
+
+        /* EFEK SAAT PADAM */
+        .cake-image.extinguished {
+            animation: none !important;
+            filter: grayscale(0.2) brightness(0.9) !important;
+            transform: none !important;
+        }
+
+        /* EFEK ASAP CONTAINER */
+        .smoke-container {
+            position: absolute;
+            top: 15%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            height: 100px;
+            pointer-events: none;
+            display: none;
+        }
+
+        .smoke-container.active {
             display: block;
         }
 
-        .flames-overlay {
+        .smoke-particle {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
+            background: rgba(150, 150, 150, 0.6);
+            border-radius: 50%;
+            animation: riseSmoke 2s forwards ease-out;
         }
 
-        /* EFEK API MENYALA BERSINAR & KERLIP */
-        .flame-svg {
-            position: absolute;
-            width: 24px;
-            height: 35px;
-            transform-origin: bottom center;
-            transition: transform 0.15s ease-out, opacity 0.5s ease-out;
-            filter: drop-shadow(0 0 10px rgba(255, 165, 0, 0.95)) drop-shadow(0 0 20px rgba(255, 215, 0, 0.8));
-            animation: candleFlicker 0.15s infinite alternate ease-in-out;
-        }
-
-        .flame-1 { top: 25%; left: 34%; }
-        .flame-2 { top: 35%; left: 49%; animation-delay: 0.05s; }
-        .flame-3 { top: 25%; left: 65%; animation-delay: 0.1s; }
-
-        @keyframes candleFlicker {
+        @keyframes riseSmoke {
             0% {
-                transform: scale(1) rotate(-2deg);
-                filter: drop-shadow(0 0 8px rgba(255, 140, 0, 0.9)) drop-shadow(0 0 16px rgba(255, 215, 0, 0.7));
+                opacity: 0.8;
+                transform: translateY(0) scale(1);
             }
             100% {
-                transform: scale(1.15) rotate(3deg);
-                filter: drop-shadow(0 0 14px rgba(255, 175, 0, 1)) drop-shadow(0 0 24px rgba(255, 235, 50, 0.9));
+                opacity: 0;
+                transform: translateY(-80px) scale(3);
             }
-        }
-
-        /* SAAT LILIN TERTIUP PADAM */
-        .flame-out {
-            opacity: 0 !important;
-            transform: scale(0.1) translateY(-15px) !important;
-            filter: none !important;
         }
 
         /* KONTROL MIKROFON */
         .controls-panel {
             width: 100%;
-            max-width: 300px;
+            max-width: 280px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -369,12 +381,15 @@
     <div id="main-stage">
         <div class="card-perspective-container">
 
+            <!-- COVER CARD -->
             <div id="card-cover" class="card-cover" onclick="openCard()">
                 <div class="cover-hint">✦ klik untuk membuka ✦</div>
                 <img id="cover-img" src="cover.png" alt="Cover">
             </div>
 
+            <!-- OPEN SPREAD CARD -->
             <div id="card-spread" class="card-spread">
+                <!-- HALAMAN KIRI: AMPLOP & SURAT -->
                 <div class="card-page left-page">
                     <div class="envelope-wrapper">
                         <img id="envelope-img" class="envelope-image" src="envelope.png" alt="Envelope">
@@ -383,6 +398,7 @@
                     <button id="toggle-letter-btn" class="btn-letter-toggle" onclick="toggleLetter()">Buka Surat ✉️</button>
                 </div>
 
+                <!-- HALAMAN KANAN: KUE & LILIN -->
                 <div class="card-page right-page">
                     <canvas id="confetti"></canvas>
                     <div id="wish-message">Make a wish, Enai! ✨</div>
@@ -390,20 +406,7 @@
                     <div class="cake-container">
                         <div class="cake-wrapper">
                             <img id="cake-img" class="cake-image" src="cake.png" alt="Cake">
-                            <div class="flames-overlay">
-                                <svg class="flame-svg flame-1" viewBox="0 0 50 80">
-                                    <path d="M25 0 C25 20 50 35 50 55 C50 70 38 80 25 80 C12 80 0 70 0 55 C0 35 25 20 25 0 Z" fill="#ff9800"/>
-                                    <path d="M25 20 C25 32 40 42 40 57 C40 67 33 75 25 75 C17 75 10 67 10 57 C10 42 25 32 25 20 Z" fill="#ffeb3b"/>
-                                </svg>
-                                <svg class="flame-svg flame-2" viewBox="0 0 50 80">
-                                    <path d="M25 0 C25 20 50 35 50 55 C50 70 38 80 25 80 C12 80 0 70 0 55 C0 35 25 20 25 0 Z" fill="#ff9800"/>
-                                    <path d="M25 20 C25 32 40 42 40 57 C40 67 33 75 25 75 C17 75 10 67 10 57 C10 42 25 32 25 20 Z" fill="#ffeb3b"/>
-                                </svg>
-                                <svg class="flame-svg flame-3" viewBox="0 0 50 80">
-                                    <path d="M25 0 C25 20 50 35 50 55 C50 70 38 80 25 80 C12 80 0 70 0 55 C0 35 25 20 25 0 Z" fill="#ff9800"/>
-                                    <path d="M25 20 C25 32 40 42 40 57 C40 67 33 75 25 75 C17 75 10 67 10 57 C10 42 25 32 25 20 Z" fill="#ffeb3b"/>
-                                </svg>
-                            </div>
+                            <div id="smoke-container" class="smoke-container"></div>
                         </div>
                     </div>
 
@@ -477,15 +480,6 @@
             }
         }
 
-        /* ANIMASI ANGIN TIUPAN PADA API */
-        function bendFlames(deg) {
-            document.querySelectorAll('.flame-svg').forEach(f => {
-                if (!f.classList.contains('flame-out')) {
-                    f.style.transform = `rotate(${deg}deg) scale(${1 + deg/50})`;
-                }
-            });
-        }
-
         function listenAudio() {
             if (!isCardOpen || !analyser || areCandlesOut) return;
             const data = new Uint8Array(analyser.frequencyBinCount);
@@ -496,11 +490,12 @@
 
             document.getElementById('blow-meter').value = average;
 
+            const cakeImg = document.getElementById('cake-img');
             if (average > 0.4 && !isManualBlowing) {
-                bendFlames(average * 35);
+                cakeImg.classList.add('blowing');
                 startBlowTimer();
             } else if (!isManualBlowing) {
-                bendFlames(0);
+                cakeImg.classList.remove('blowing');
                 cancelBlowTimer();
             }
             requestAnimationFrame(listenAudio);
@@ -510,7 +505,7 @@
             if (areCandlesOut) return;
             isManualBlowing = true;
             document.getElementById('blow-meter').value = 1.0;
-            bendFlames(40);
+            document.getElementById('cake-img').classList.add('blowing');
             startBlowTimer();
         }
 
@@ -518,13 +513,13 @@
             if (areCandlesOut || !isManualBlowing) return;
             isManualBlowing = false;
             document.getElementById('blow-meter').value = 0;
-            bendFlames(0);
+            document.getElementById('cake-img').classList.remove('blowing');
             cancelBlowTimer();
         }
 
         function startBlowTimer() {
             if (!blowTimeout) {
-                blowTimeout = setTimeout(extinguish, 550);
+                blowTimeout = setTimeout(extinguish, 500);
             }
         }
 
@@ -538,8 +533,12 @@
         function extinguish() {
             areCandlesOut = true;
             cancelBlowTimer();
-            
-            document.querySelectorAll('.flame-svg').forEach(f => f.classList.add('flame-out'));
+
+            const cakeImg = document.getElementById('cake-img');
+            cakeImg.classList.remove('blowing');
+            cakeImg.classList.add('extinguished');
+
+            triggerSmoke();
 
             document.getElementById('wish-message').classList.add('show-wish');
             document.getElementById('fallback-btn').style.display = 'none';
@@ -547,10 +546,31 @@
             startConfetti();
         }
 
+        function triggerSmoke() {
+            const smokeContainer = document.getElementById('smoke-container');
+            smokeContainer.innerHTML = '';
+            smokeContainer.classList.add('active');
+
+            const candlePositions = [30, 50, 70]; // % lokasi 3 lilin
+            candlePositions.forEach(pos => {
+                for (let i = 0; i < 4; i++) {
+                    const particle = document.createElement('div');
+                    particle.className = 'smoke-particle';
+                    const size = Math.random() * 8 + 6;
+                    particle.style.width = `${size}px`;
+                    particle.style.height = `${size}px`;
+                    particle.style.left = `${pos + (Math.random() * 6 - 3)}%`;
+                    particle.style.animationDelay = `${Math.random() * 0.3}s`;
+                    smokeContainer.appendChild(particle);
+                }
+            });
+        }
+
         function relightCandles() {
             areCandlesOut = false;
-            
-            document.querySelectorAll('.flame-svg').forEach(f => f.classList.remove('flame-out'));
+            const cakeImg = document.getElementById('cake-img');
+            cakeImg.classList.remove('extinguished', 'blowing');
+            document.getElementById('smoke-container').classList.remove('active');
 
             document.getElementById('wish-message').classList.remove('show-wish');
             document.getElementById('fallback-btn').style.display = 'block';
