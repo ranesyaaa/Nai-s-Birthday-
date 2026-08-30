@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Happy Birthday Dhis!</title>
+    <title>Happy Birthday, Enai!</title>
     <style>
         :root {
             --paper-bg: #f8f1e0;
@@ -48,7 +48,7 @@
             align-items: center;
         }
 
-        /* --- COVER CARD --- */
+        /* COVER CARD */
         .card-cover {
             display: block;
             margin: 0 auto;
@@ -82,7 +82,7 @@
             font-weight: bold;
         }
 
-        /* --- OPEN CARD SPREAD --- */
+        /* OPEN CARD SPREAD */
         .card-spread {
             display: none;
             width: 100%;
@@ -128,7 +128,7 @@
             border-right: 1px dashed #ccc;
         }
 
-        /* --- BUTTON TUTUP --- */
+        /* BUTTON TUTUP */
         #close-card-btn {
             margin-top: 20px;
             margin-bottom: 20px;
@@ -154,7 +154,7 @@
             display: block;
         }
 
-        /* --- HALAMAN SURAT & AMPLOP --- */
+        /* SURAT & AMPLOP */
         .envelope-wrapper {
             position: relative;
             width: 100%;
@@ -218,7 +218,7 @@
             transform: scale(1.05);
         }
 
-        /* --- HALAMAN KUE & LILIN --- */
+        /* KUE & LILIN SVG OVERLAY */
         .cake-container {
             width: 100%;
             height: 100%;
@@ -244,7 +244,6 @@
             display: block;
         }
 
-        /* POSISI API DI ATAS GAMBAR KUE */
         .flames-overlay {
             position: absolute;
             top: 0;
@@ -264,7 +263,6 @@
             animation: flicker 0.2s infinite alternate ease-in-out;
         }
 
-        /* Posisi ketiga lilin pada kue */
         .flame-1 { top: 25%; left: 34%; }
         .flame-2 { top: 35%; left: 49%; }
         .flame-3 { top: 25%; left: 65%; }
@@ -364,25 +362,25 @@
 
             <div id="card-cover" class="card-cover" onclick="openCard()">
                 <div class="cover-hint">✦ klik untuk membuka ✦</div>
-                <img id="cover-img" src="https://i.ibb.co/nsvgwCXII/1.png" alt="Cover">
+                <img id="cover-img" src="cover.png" alt="Cover">
             </div>
 
             <div id="card-spread" class="card-spread">
                 <div class="card-page left-page">
                     <div class="envelope-wrapper">
-                        <img id="envelope-img" class="envelope-image" src="https://i.ibb.co/NdDM69gX/4.png" alt="Envelope">
-                        <img id="letter-img" class="letter-content" src="https://i.ibb.co/cKFXnwv2/3.png" alt="Letter" onclick="toggleLetter()">
+                        <img id="envelope-img" class="envelope-image" src="envelope.png" alt="Envelope">
+                        <img id="letter-img" class="letter-content" src="letter.png" alt="Letter" onclick="toggleLetter()">
                     </div>
                     <button id="toggle-letter-btn" class="btn-letter-toggle" onclick="toggleLetter()">Buka Surat ✉️</button>
                 </div>
 
                 <div class="card-page right-page">
                     <canvas id="confetti"></canvas>
-                    <div id="wish-message">Make a wish, Dhis! ✨</div>
+                    <div id="wish-message">Make a wish, Enai! ✨</div>
 
                     <div class="cake-container">
                         <div class="cake-wrapper">
-                            <img id="cake-img" class="cake-image" src="https://i.ibb.co/nsvgwCXII/2.png" alt="Cake">
+                            <img id="cake-img" class="cake-image" src="cake.png" alt="Cake">
                             <div class="flames-overlay">
                                 <svg class="flame-svg flame-1" viewBox="0 0 50 80">
                                     <path d="M25 0 C25 20 50 35 50 55 C50 70 38 80 25 80 C12 80 0 70 0 55 C0 35 25 20 25 0 Z" fill="#ff9800"/>
@@ -455,7 +453,6 @@
             }
         }
 
-        // WEB AUDIO API
         async function initAudio() {
             if (areCandlesOut) return;
             try {
@@ -552,7 +549,6 @@
             initAudio();
         }
 
-        // CONFETTI
         let confettiInterval = null;
         function startConfetti() {
             const canvas = document.getElementById('confetti');
